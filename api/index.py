@@ -1,17 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel
-from typing import List
-import json
-import os
-from dotenv import load_dotenv
+# from fastapi.responses import StreamingResponse, JSONResponse
+# from pydantic import BaseModel
+# from typing import List
+# import json
+# import os
+# from dotenv import load_dotenv
 # from mangum import Mangum  # ✅ Required for Vercel
-from langchain_openai import ChatOpenAI
-from langchain.schema import AIMessage, HumanMessage
+# from langchain_openai import ChatOpenAI
+# from langchain.schema import AIMessage, HumanMessage
 
 
-load_dotenv()
+# load_dotenv()
 
 # cv_data = {}
 
@@ -31,8 +31,8 @@ app = FastAPI()
 #     raise e
 
 
-class ChatRequest(BaseModel):
-    messages: List[str]
+# class ChatRequest(BaseModel):
+#     messages: List[str]
 
 @app.get("/")
 async def root():
