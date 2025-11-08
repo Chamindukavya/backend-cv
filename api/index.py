@@ -6,7 +6,7 @@ from typing import List
 import json
 import os
 from dotenv import load_dotenv
-from mangum import Mangum  # ✅ Required for Vercel
+# from mangum import Mangum  # ✅ Required for Vercel
 from langchain_openai import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage
 
@@ -65,4 +65,4 @@ async def root():
 
 #     return StreamingResponse(generate(), media_type="text/plain")
 
-handler = Mangum(app)
+# handler = Mangum(app)
