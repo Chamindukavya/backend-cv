@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 # from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List
 from dotenv import load_dotenv
 # from mangum import Mangum 
-# from langchain_openai import ChatOpenAI
-# from langchain.schema import AIMessage, HumanMessage
+from langchain_openai import ChatOpenAI
+from langchain.schema import AIMessage, HumanMessage
 
 load_dotenv()
 
@@ -14,18 +14,18 @@ cv_data = {}
 
 app = FastAPI()
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# try:
-#     llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
-# except Exception as e:
-#     raise e
+try:
+    llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
+except Exception as e:
+    raise e
 
 
 class ChatRequest(BaseModel):
