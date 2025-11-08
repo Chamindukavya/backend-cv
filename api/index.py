@@ -1,17 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 from typing import List
 import json
 import os
 from dotenv import load_dotenv
 from mangum import Mangum  # ✅ Required for Vercel
-
-
-
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, HumanMessage
 
 
@@ -39,8 +35,8 @@ class ChatRequest(BaseModel):
     messages: List[str]
 
 @app.get("/")
-def root():
-    return {"status": "ok"}
+async def root():
+    return JSONResponse(content={"status": "ok"})
 
 
 @app.post("/chat")
