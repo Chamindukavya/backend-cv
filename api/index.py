@@ -13,17 +13,17 @@ from langchain.schema import AIMessage, HumanMessage
 
 load_dotenv()
 
-cv_data = {}
+# cv_data = {}
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 # try:
 #     llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
