@@ -60,4 +60,4 @@ def root():
 #     return StreamingResponse(generate(), media_type="text/plain")
 
 # Handler for Vercel
-handler = Mangum(app)
+# handler = Mangum(app)
