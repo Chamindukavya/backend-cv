@@ -32,6 +32,11 @@ llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
 class ChatRequest(BaseModel):
     messages: List[str]
 
+@app.get("/")
+def root():
+    return {"status": "ok"}
+
+
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
     system_prompt = """
