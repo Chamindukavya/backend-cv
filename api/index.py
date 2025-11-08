@@ -3,24 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List
-import json
 import os
-from dotenv import load_dotenv
-from mangum import Mangum  # ✅ Required for Vercel
+from mangum import Mangum
 
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, HumanMessage
-
-print("🚀 Starting FastAPI on Vercel...")
-
-load_dotenv()
-
-cv_data = {}
 
 app = FastAPI()
 
-# ✅ CORS setup (important for frontend integration)
+# CORS setup
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,21 +20,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-try:
-    llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
-    print("✅ ChatOpenAI loaded successfully")
-except Exception as e:
-    print("❌ Error initializing ChatOpenAI:", e)
-    raise e
-
+# Initialize LLM (lazy loading is better for serverless)
+def get_llm():
+    return ChatOpenAI(model="gpt-4o-mini", streaming=True)
 
 class ChatRequest(BaseModel):
     messages: List[str]
 
 @app.get("/")
 def root():
-    return {"status": "ok"}
-
+    return {"status": "ok", "message": "FastAPI is running on Vercel"}
 
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
@@ -60,6 +46,8 @@ async def chat_endpoint(request: ChatRequest):
     - Optionally, generate starter code snippets or configuration examples (in Python, Java, or TypeScript).
     """
 
+    llm = get_llm()  # Initialize here instead of at module level
+    
     conversation = [AIMessage(content=system_prompt)]
     for msg in request.messages:
         conversation.append(HumanMessage(content=msg))
@@ -71,5 +59,5 @@ async def chat_endpoint(request: ChatRequest):
 
     return StreamingResponse(generate(), media_type="text/plain")
 
-# ✅ Add this line for Vercel
+# Handler for Vercel
 handler = Mangum(app)
