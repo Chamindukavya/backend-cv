@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+# from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List
 import os
@@ -11,7 +11,7 @@ from langchain.schema import AIMessage, HumanMessage
 
 
 # from fastapi import FastAPI
-# from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
@@ -28,8 +28,8 @@ app.add_middleware(
 def get_llm():
     return ChatOpenAI(model="gpt-4o-mini", streaming=True)
 
-# class ChatRequest(BaseModel):
-#     messages: List[str]
+class ChatRequest(BaseModel):
+    messages: List[str]
 
 @app.get("/")
 async def root():
@@ -61,7 +61,7 @@ async def chat_endpoint(request: ChatRequest):
             if chunk.content:
                 yield chunk.content
 
-    return StreamingResponse(generate(), media_type="text/plain")
+    # return StreamingResponse(generate(), media_type="text/plain")
 
 # Handler for Vercel
 handler = Mangum(app)
