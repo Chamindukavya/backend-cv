@@ -3,37 +3,45 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List
+import json
 import os
-# from mangum import Mangum
+from dotenv import load_dotenv
+from mangum import Mangum  # ✅ Required for Vercel
+
+
 
 from langchain_openai import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, HumanMessage
 
 
-# from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+load_dotenv()
+
+cv_data = {}
 
 app = FastAPI()
 
-# CORS setup
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Initialize LLM (lazy loading is better for serverless)
-def get_llm():
-    return ChatOpenAI(model="gpt-4o-mini", streaming=True)
+try:
+    llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
+except Exception as e:
+    raise e
+
 
 class ChatRequest(BaseModel):
     messages: List[str]
 
 @app.get("/")
-async def root():
-    return JSONResponse(content={"status": "ok", "message": "FastAPI is running on Vercel"})
+def root():
+    return {"status": "ok"}
+
 
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
@@ -50,8 +58,6 @@ async def chat_endpoint(request: ChatRequest):
     - Optionally, generate starter code snippets or configuration examples (in Python, Java, or TypeScript).
     """
 
-    llm = get_llm()  # Initialize here instead of at module level
-    
     conversation = [AIMessage(content=system_prompt)]
     for msg in request.messages:
         conversation.append(HumanMessage(content=msg))
@@ -63,5 +69,4 @@ async def chat_endpoint(request: ChatRequest):
 
     return StreamingResponse(generate(), media_type="text/plain")
 
-# Handler for Vercel
-# handler = Mangum(app)
+handler = Mangum(app)
