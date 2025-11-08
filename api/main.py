@@ -12,6 +12,8 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, HumanMessage
 
+print("🚀 Starting FastAPI on Vercel...")
+
 load_dotenv()
 
 cv_data = {}
@@ -27,7 +29,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
+try:
+    llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
+    print("✅ ChatOpenAI loaded successfully")
+except Exception as e:
+    print("❌ Error initializing ChatOpenAI:", e)
+    raise e
+
 
 class ChatRequest(BaseModel):
     messages: List[str]
