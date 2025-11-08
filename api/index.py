@@ -31,9 +31,9 @@ except Exception as e:
 class ChatRequest(BaseModel):
     messages: List[str]
 
-@app.get("/")
-def root():
-    return {"status": "ok"}
+# @app.get("/")
+# def root():
+#     return {"status": "ok"}
 
 
 @app.post("/chat")
