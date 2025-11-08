@@ -25,8 +25,8 @@ app = FastAPI()
 # )
 
 # Initialize LLM (lazy loading is better for serverless)
-def get_llm():
-    return ChatOpenAI(model="gpt-4o-mini", streaming=True)
+# def get_llm():
+#     return ChatOpenAI(model="gpt-4o-mini", streaming=True)
 
 # class ChatRequest(BaseModel):
 #     messages: List[str]
