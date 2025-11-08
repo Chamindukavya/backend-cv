@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
 from dotenv import load_dotenv
-from mangum import Mangum 
+# from mangum import Mangum 
 # from langchain_openai import ChatOpenAI
 # from langchain.schema import AIMessage, HumanMessage
 
@@ -62,4 +62,4 @@ def root():
 
 #     return StreamingResponse(generate(), media_type="text/plain")
 
-handler = Mangum(app)
+# handler = Mangum(app)
