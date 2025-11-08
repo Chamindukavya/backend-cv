@@ -12,13 +12,13 @@ from langchain.schema import AIMessage, HumanMessage
 app = FastAPI()
 
 # CORS setup
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 # Initialize LLM (lazy loading is better for serverless)
 # def get_llm():
