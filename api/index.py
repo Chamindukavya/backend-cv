@@ -25,10 +25,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-try:
-    llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
-except Exception as e:
-    raise e
+# try:
+#     llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
+# except Exception as e:
+#     raise e
 
 
 class ChatRequest(BaseModel):
