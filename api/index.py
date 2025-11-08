@@ -1,68 +1,65 @@
 from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, JSONResponse
-# from pydantic import BaseModel
-# from typing import List
-# import json
-# import os
-# from dotenv import load_dotenv
-# from mangum import Mangum  # ✅ Required for Vercel
-# from langchain_openai import ChatOpenAI
-# from langchain.schema import AIMessage, HumanMessage
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from typing import List
+from dotenv import load_dotenv
+from mangum import Mangum 
+from langchain_openai import ChatOpenAI
+from langchain.schema import AIMessage, HumanMessage
 
+load_dotenv()
 
-# load_dotenv()
-
-# cv_data = {}
+cv_data = {}
 
 app = FastAPI()
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# try:
-#     llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
-# except Exception as e:
-#     raise e
+try:
+    llm = ChatOpenAI(model="gpt-4o-mini", streaming=True)
+except Exception as e:
+    raise e
 
 
-# class ChatRequest(BaseModel):
-#     messages: List[str]
+class ChatRequest(BaseModel):
+    messages: List[str]
 
 @app.get("/")
-async def root():
-    return JSONResponse(content={"status": "ok"})
+def root():
+    return {"status": "ok"}
 
 
-# @app.post("/chat")
-# async def chat_endpoint(request: ChatRequest):
-#     system_prompt = """
-#     You are an expert software architect and design assistant. Your task is to analyze high-level user requirements and automatically design appropriate software solutions.
+@app.post("/chat")
+async def chat_endpoint(request: ChatRequest):
+    system_prompt = """
+    You are an expert software architect and design assistant. Your task is to analyze high-level user requirements and automatically design appropriate software solutions.
 
-#     Using advanced software engineering principles, you should:
+    Using advanced software engineering principles, you should:
 
-#     - Interpret the given user requirements clearly.
-#     - Identify the suitable software architecture style (e.g., microservices, layered, event-driven, serverless, etc.) and justify your choice.
-#     - Propose a solution architecture diagram or structured textual design including components, data flow, APIs, and databases.
-#     - Recommend appropriate technologies, frameworks, and design patterns for each component.
-#     - Explain the reasoning behind each design decision, including scalability, maintainability, performance, and security aspects.
-#     - Optionally, generate starter code snippets or configuration examples (in Python, Java, or TypeScript).
-#     """
+    - Interpret the given user requirements clearly.
+    - Identify the suitable software architecture style (e.g., microservices, layered, event-driven, serverless, etc.) and justify your choice.
+    - Propose a solution architecture diagram or structured textual design including components, data flow, APIs, and databases.
+    - Recommend appropriate technologies, frameworks, and design patterns for each component.
+    - Explain the reasoning behind each design decision, including scalability, maintainability, performance, and security aspects.
+    - Optionally, generate starter code snippets or configuration examples (in Python, Java, or TypeScript).
+    """
 
-#     conversation = [AIMessage(content=system_prompt)]
-#     for msg in request.messages:
-#         conversation.append(HumanMessage(content=msg))
+    conversation = [AIMessage(content=system_prompt)]
+    for msg in request.messages:
+        conversation.append(HumanMessage(content=msg))
 
-#     def generate():
-#         for chunk in llm.stream(conversation):
-#             if chunk.content:
-#                 yield chunk.content
+    def generate():
+        for chunk in llm.stream(conversation):
+            if chunk.content:
+                yield chunk.content
 
-#     return StreamingResponse(generate(), media_type="text/plain")
+    return StreamingResponse(generate(), media_type="text/plain")
 
-# handler = Mangum(app)
+handler = Mangum(app)
