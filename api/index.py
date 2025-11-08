@@ -32,8 +32,8 @@ app = FastAPI()
 #     messages: List[str]
 
 @app.get("/")
-def root():
-    return {"status": "ok", "message": "FastAPI is running on Vercel"}
+async def root():
+    return JSONResponse(content={"status": "ok", "message": "FastAPI is running on Vercel"})
 
 # @app.post("/chat")
 # async def chat_endpoint(request: ChatRequest):
